@@ -1,0 +1,21 @@
+{% extends "base_admin.html" %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ФИО</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Почта</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>{{employee.first_name}} {{employee.second_name}}</td>
+            <td>{{employee.phone_number}}</td>
+            <td>{{employee.email}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

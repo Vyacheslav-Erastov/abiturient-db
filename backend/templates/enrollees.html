@@ -1,0 +1,21 @@
+{% extends "base_admin.html" %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ФИО</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Почта</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for enrollee in enrollees %}
+        <tr>
+            <td><a href="{{url_for('read_enrollee', enrollee_id=enrollee.id)}}">{{enrollee.first_name}} {{enrollee.second_name}}</a></td>
+            <td>{{enrollee.phone_number}}</td>
+            <td>{{enrollee.email}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

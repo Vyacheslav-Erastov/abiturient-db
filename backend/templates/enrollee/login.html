@@ -1,0 +1,17 @@
+<form method="post" action="{{url_for('enrollee_login')}}">
+    <div class="modal-body">
+        <div class="mb-3">
+            <label for="email" class="form-label">Почта</label>
+            <input class="form-control" id="email" name="email">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input class="form-control" id="password" name="password">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary">Войти</button>
+        <a href="{{url_for('enrollee_register_get')}}">Регистрация</a>
+    </div>
+</form>

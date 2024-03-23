@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import Form
 from pydantic import BaseModel
 from app.models.application import ApplicationStatus
+
 if TYPE_CHECKING:
     from app.schemas.enrollee import Enrollee
     from app.schemas.speciality import Speciality
@@ -11,9 +12,9 @@ if TYPE_CHECKING:
 
 
 class ApplicationBase(BaseModel):
-    enrollee_id: str
-    employee_id: str
-    speciality_id: str
+    enrollee_id: UUID
+    employee_id: UUID
+    speciality_id: UUID
     registration_date: datetime | None
     status: ApplicationStatus | None = ApplicationStatus.CREATED
     total_points: int
@@ -39,18 +40,16 @@ class ApplicationTemplate(Application):
 
 
 class ApplicationForm(ApplicationBase):
+    speciality_id: UUID
+    total_points: int
 
     @classmethod
     def as_form(
         cls,
-        enrollee_id: str = Form(),
-        employee_id: str = Form(),
-        speciality_id: str = Form(),
+        speciality_id: UUID = Form(),
         total_points: int = Form(),
     ):
         return cls(
-            enrollee_id=enrollee_id,
-            employee_id=employee_id,
             speciality_id=speciality_id,
             total_points=total_points,
         )

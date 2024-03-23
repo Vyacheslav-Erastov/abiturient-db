@@ -25,6 +25,7 @@ from .employee import (
     EmployeeDetailed,
     EmployeeTemplate,
     EmployeeForm,
+    EmployeeLogin
 )
 from .speciality import (
     SpecialityBase,

@@ -29,7 +29,7 @@ class EmployeeCreate(Employee):
 
 
 class EmployeeTemplate(Employee):
-    id: int
+    id: UUID
 
 
 class EmployeeForm(EmployeeBase):
@@ -50,6 +50,18 @@ class EmployeeForm(EmployeeBase):
             email=email,
             password=password
         )
+    
+class EmployeeLogin(BaseModel):
+    email: str
+    password: str
+
+    @classmethod
+    def as_form(
+        cls,
+        email: str | None = Form(),
+        password: str = Form(),
+    ):
+        return cls(email=email, password=password)
 
 
 class EmployeeDetailed(Employee):

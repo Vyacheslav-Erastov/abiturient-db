@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Имя
+        </div>
+        <div class="col">
+            {{employee.first_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Фамилия
+        </div>
+        <div class="col">
+            {{employee.second_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Номер телефона
+        </div>
+        <div class="col">
+            {{employee.second_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Почта
+        </div>
+        <div class="col">
+            {{employee.email}}
+        </div>
+    </div>
+</div>
+{% endblock %}

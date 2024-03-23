@@ -1,6 +1,6 @@
 {% extends "login_base.html" %}
 {% block content %}
-<form method="post" action="{{url_for('enrollee_register')}}">
+<form method="post" action="{{url_for('employee_register')}}">
     <div class="modal-body">
         <div class="mb-3">
             <label for="first_name" class="form-label">Имя</label>
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="{{url_for('enrollee_start')}}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</a>
+        <a href="{{url_for('employee_start')}}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</a>
         <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
     </div>
 </form>

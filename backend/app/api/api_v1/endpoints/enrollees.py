@@ -56,7 +56,7 @@ def enrollee_start(
     if enrollee is None:
         return templates.TemplateResponse(request=request, name="login.html")
     return templates.TemplateResponse(
-        request=request, name="base.html", context={"enrollee": enrollee}
+        request=request, name="enrollee.html", context={"enrollee": enrollee}
     )
 
 
@@ -84,6 +84,15 @@ def enrollee_login_get(request: Request):
     return templates.TemplateResponse(request=request, name="login.html")
 
 
+@router.get("/logout")
+def enrollee_logout_get(request: Request):
+    response = RedirectResponse(
+        request.url_for("enrollee_start"), status_code=status.HTTP_303_SEE_OTHER
+    )
+    response.delete_cookie("token")
+    return response
+
+
 @router.post("/login")
 def enrollee_login(
     request: Request,
@@ -103,8 +112,8 @@ def enrollee_login(
     access_token = create_access_token(
         data={"sub": enrollee.email}, expires_delta=access_token_expires
     )
-    response = templates.TemplateResponse(
-        request=request, name="base.html", context={"enrollee": enrollee}
+    response = RedirectResponse(
+        request.url_for("enrollee_start"), status_code=status.HTTP_303_SEE_OTHER
     )
     response.set_cookie(key="token", value=access_token)
     return response

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Имя
+        </div>
+        <div class="col">
+            {{enrollee.first_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Фамилия
+        </div>
+        <div class="col">
+            {{enrollee.second_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Номер телефона
+        </div>
+        <div class="col">
+            {{enrollee.second_name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            Почта
+        </div>
+        <div class="col">
+            {{enrollee.email}}
+        </div>
+    </div>
+</div>
+    <div class="container-fluid">
+    <h3>Мои заявки</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Специальность</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Дата регистрации</th>
+                <th scope="col">Количество баллов</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in enrollee.applications %}
+            <tr>
+                <td>{{application.speciality.name}}</a></td>
+                <td>{{application.status}}</td>
+                <td>{{application.registartion_date}}</td>
+                <td>{{application.total_points}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app import crud
 from app.api import dependencies as deps
+from app.core.security import get_current_enrollee
 
 router = APIRouter()
 
@@ -32,6 +33,7 @@ def read_applications(
 @router.post("/")
 def create_application(
     request: Request,
+    enrollee=Depends(get_current_enrollee),
     application_in: schemas.ApplicationCreate = Depends(
         schemas.ApplicationForm.as_form
     ),

@@ -17,10 +17,12 @@ from app.core.security import (
 from app.api.api_v1.endpoints.specialities import read_specialities
 from app.api.api_v1.endpoints.applications import read_applications
 from app.core.context_manager import handle_db_exception
+import os
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="templates/employee")
+# templates = Jinja2Templates(directory="templates/employee")
+templates = Jinja2Templates(directory=os.path.join("templates", "employee"))
 
 
 # @router.get("/")

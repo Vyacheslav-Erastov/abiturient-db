@@ -8,15 +8,6 @@ from .enrollee import (
     EnrolleeUpdate,
     EnrolleeLogin
 )
-from .application import (
-    Application,
-    ApplicationBase,
-    ApplicationCreate,
-    ApplicationDetailed,
-    ApplicationForm,
-    ApplicationTemplate,
-    ApplicationUpdate,
-)
 from .employee import (
     EmployeeBase,
     EmployeeUpdate,
@@ -34,5 +25,14 @@ from .speciality import (
     SpecialityForm,
     SpecialityUpdate,
     SpecialityTemplate,
+)
+from .application import (
+    Application,
+    ApplicationBase,
+    ApplicationCreate,
+    ApplicationDetailed,
+    ApplicationForm,
+    ApplicationTemplate,
+    ApplicationUpdate,
 )
 from .websocket import MessageWS, EventWS

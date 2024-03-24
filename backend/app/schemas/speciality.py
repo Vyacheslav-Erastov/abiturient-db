@@ -2,6 +2,8 @@ from uuid import UUID
 from fastapi import Form
 from pydantic import BaseModel
 
+# from app.schemas.application import ApplicationDetailed
+
 
 class SpecialityBase(BaseModel):
     name: str
@@ -19,6 +21,9 @@ class SpecialityUpdate(SpecialityBase):
 
 class Speciality(SpecialityBase):
     id: UUID
+
+
+# ApplicationDetailed.model_rebuild()
 
 
 class SpecialityCreate(Speciality):

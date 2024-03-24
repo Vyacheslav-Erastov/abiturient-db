@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
 from uuid import UUID
 from fastapi import Form
 from pydantic import BaseModel
 
-from app.schemas.application import Application
+# if TYPE_CHECKING:
+#     from app.schemas.application import Application
+
+# from app.schemas.application import ApplicationDetailed
 
 
 class EmployeeBase(BaseModel):
@@ -48,9 +52,10 @@ class EmployeeForm(EmployeeBase):
             second_name=second_name,
             phone_number=phone_number,
             email=email,
-            password=password
+            password=password,
         )
-    
+
+
 class EmployeeLogin(BaseModel):
     email: str
     password: str
@@ -65,4 +70,4 @@ class EmployeeLogin(BaseModel):
 
 
 class EmployeeDetailed(Employee):
-    applications: list["Application"] = []
+    applications: list = []

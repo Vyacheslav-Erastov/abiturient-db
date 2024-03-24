@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
 from uuid import UUID
 from fastapi import Form
 from pydantic import BaseModel
 
-from app.schemas.application import Application
+# from app.schemas.application import ApplicationDetailed
+
+if TYPE_CHECKING:
+    from app.schemas.application import Application
 
 
 class EnrolleeBase(BaseModel):
@@ -66,4 +70,4 @@ class EnrolleeLogin(BaseModel):
 
 
 class EnrolleeDetailed(Enrollee):
-    applications: list["Application"] = []
+    applications: list = []

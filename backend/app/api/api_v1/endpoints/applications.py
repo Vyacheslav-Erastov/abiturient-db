@@ -7,28 +7,22 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app import crud
 from app.api import dependencies as deps
-from app.core.security import get_current_enrollee
+from app.core.security import get_current_employee, get_current_enrollee
+from app.core.context_manager import handle_db_exception
 
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/")
-def read_applications(
-    request: Request,
-    db: Session = Depends(deps.get_db),
-):
+# @router.get("/")
+def read_applications(db):
     db_applications = crud.application.get_multi(db=db)
     applications = []
     for db_application in db_applications:
-        application = schemas.ApplicationTemplate.from_orm(db_application).model_dump()
+        application = schemas.ApplicationDetailed.from_orm(db_application).model_dump()
         applications.append(application)
-    return templates.TemplateResponse(
-        request=request,
-        name="applications.html",
-        context={"applications": applications},
-    )
+    return applications
 
 
 @router.post("/")
@@ -71,21 +65,26 @@ def create_applications(
     return applications_in
 
 
-@router.put("/{application_id}", response_model=schemas.Application)
+@router.get("/")
 def update_application(
+    request: Request,
     application_id: UUID,
-    application_in: schemas.ApplicationUpdate,
+    new_status: str,
+    employee=Depends(get_current_employee),
     db: Session = Depends(deps.get_db),
 ):
-    try:
-        application = crud.application.update(
-            db=db, obj_in=application_in, _id=application_id
+    if employee is None:
+        return RedirectResponse(
+            request.url_for("employee_start"), status_code=status.HTTP_303_SEE_OTHER
         )
-        db.commit()
-    except Exception as e:
-        db.rollback()
-        print(e)
-    return application
+    with handle_db_exception(db):
+        application = crud.application.update_status(
+            db=db, employee_id=employee.id, status=new_status, _id=application_id
+        )
+    return RedirectResponse(
+        request.url_for("employee_applications_get"),
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
 
 
 @router.delete("/")

@@ -15,6 +15,8 @@ from app.core.security import (
     get_password_hash,
 )
 from app.api.api_v1.endpoints.specialities import read_specialities
+from app.api.api_v1.endpoints.applications import read_applications
+from app.core.context_manager import handle_db_exception
 
 router = APIRouter()
 
@@ -54,11 +56,40 @@ def employee_specialities_get(
     employee=Depends(get_current_employee),
     db: Session = Depends(deps.get_db),
 ):
+    if not employee:
+        response = RedirectResponse(
+            request.url_for("employee_start"), status_code=status.HTTP_303_SEE_OTHER
+        )
+        return response
     specialities = read_specialities(db=db)
     return templates.TemplateResponse(
         request=request,
         name="specialities.html",
         context={"employee": employee, "specialities": specialities},
+    )
+
+
+@router.get("/applications")
+def employee_applications_get(
+    request: Request,
+    employee=Depends(get_current_employee),
+    db: Session = Depends(deps.get_db),
+):
+    if not employee:
+        response = RedirectResponse(
+            request.url_for("employee_start"), status_code=status.HTTP_303_SEE_OTHER
+        )
+        return response
+    specialities = read_specialities(db=db)
+    applications = read_applications(db=db)
+    return templates.TemplateResponse(
+        request=request,
+        name="applications.html",
+        context={
+            "employee": employee,
+            "specialities": specialities,
+            "applications": applications,
+        },
     )
 
 
@@ -73,10 +104,10 @@ def employee_register(
     employee_in: schemas.EmployeeBase = Depends(schemas.EmployeeForm.as_form),
     db: Session = Depends(deps.get_db),
 ):
-    employee_in.password = get_password_hash(employee_in.password)
-    employee_create = schemas.EmployeeCreate(**employee_in.model_dump(), id=uuid4())
-    crud.employee.create(db=db, obj_in=employee_create)
-    db.commit()
+    with handle_db_exception(db):
+        employee_in.password = get_password_hash(employee_in.password)
+        employee_create = schemas.EmployeeCreate(**employee_in.model_dump(), id=uuid4())
+        crud.employee.create(db=db, obj_in=employee_create)
     return templates.TemplateResponse(request=request, name="login.html")
 
 
@@ -97,7 +128,6 @@ def employee_logout_get(request: Request):
 @router.post("/login")
 def employee_login(
     request: Request,
-    # response: Response,
     employee_in: schemas.EmployeeLogin = Depends(schemas.EmployeeLogin.as_form),
     db: Session = Depends(deps.get_db),
 ):

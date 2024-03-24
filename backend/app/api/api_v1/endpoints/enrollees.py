@@ -14,6 +14,9 @@ from app.core.security import (
     get_current_enrollee,
     get_password_hash,
 )
+from app.api.api_v1.endpoints.applications import read_applications
+from app.core.context_manager import handle_db_exception
+from app.api.api_v1.endpoints.specialities import read_specialities
 
 router = APIRouter()
 
@@ -35,17 +38,23 @@ def read_enrollees(
     )
 
 
-# @router.get("/{enrollee_id}")
-# def read_enrollee(
-#     request: Request,
-#     enrollee_id: UUID,
-#     db: Session = Depends(deps.get_db),
-# ):
-#     db_enrollee = crud.enrollee.get(db=db, _id=enrollee_id)
-#     enrollee = schemas.EnrolleeDetailed.from_orm(db_enrollee).model_dump()
-#     return templates.TemplateResponse(
-#         request=request, name="enrollee.html", context={"enrollee": enrollee}
-#     )
+@router.get("/applications")
+def enrollee_applications_get(
+    request: Request,
+    db: Session = Depends(deps.get_db),
+    enrollee=Depends(get_current_enrollee),
+):
+    applications = read_applications(db=db)
+    specialities = read_specialities(db=db)
+    return templates.TemplateResponse(
+        request=request,
+        name="applications.html",
+        context={
+            "applications": applications,
+            "enrollee": enrollee,
+            "specialities": specialities,
+        },
+    )
 
 
 @router.get("/")
@@ -56,9 +65,7 @@ def enrollee_start(
 ):
     if enrollee is None:
         return templates.TemplateResponse(request=request, name="login.html")
-    specialities = []
-    for speciality in crud.speciality.get_multi(db=db):
-        specialities.append(schemas.Speciality.from_orm(speciality).model_dump())
+    specialities = read_specialities(db=db)
     return templates.TemplateResponse(
         request=request,
         name="enrollee.html",
@@ -77,11 +84,10 @@ def enrollee_register(
     enrollee_in: schemas.EnrolleeBase = Depends(schemas.EnrolleeForm.as_form),
     db: Session = Depends(deps.get_db),
 ):
-    enrollee_in.password = get_password_hash(enrollee_in.password)
-    print(enrollee_in.model_dump())
-    enrollee_create = schemas.EnrolleeCreate(**enrollee_in.model_dump(), id=uuid4())
-    crud.enrollee.create(db=db, obj_in=enrollee_create)
-    db.commit()
+    with handle_db_exception(db):
+        enrollee_in.password = get_password_hash(enrollee_in.password)
+        enrollee_create = schemas.EnrolleeCreate(**enrollee_in.model_dump(), id=uuid4())
+        crud.enrollee.create(db=db, obj_in=enrollee_create)
     return templates.TemplateResponse(request=request, name="login.html")
 
 
@@ -106,7 +112,6 @@ def enrollee_login(
     enrollee_in: schemas.EnrolleeLogin = Depends(schemas.EnrolleeLogin.as_form),
     db: Session = Depends(deps.get_db),
 ):
-
     enrollee = authenticate_enrollee(db, enrollee_in.email, enrollee_in.password)
     if not enrollee:
         raise HTTPException(
@@ -159,19 +164,18 @@ def create_enrollees(
     return enrollees_in
 
 
-@router.put("/{enrollee_id}", response_model=schemas.Enrollee)
+@router.put("/", response_model=schemas.Enrollee)
 def update_enrollee(
-    enrollee_id: UUID,
+    request: Request,
     enrollee_in: schemas.EnrolleeUpdate,
+    enrollee=Depends(get_current_enrollee),
     db: Session = Depends(deps.get_db),
 ):
-    try:
-        enrollee = crud.enrollee.update(db=db, obj_in=enrollee_in, _id=enrollee_id)
-        db.commit()
-    except Exception as e:
-        db.rollback()
-        print(e)
-    return enrollee
+    with handle_db_exception(db):
+        enrollee = crud.enrollee.update(db=db, obj_in=enrollee_in, _id=enrollee.id)
+    return RedirectResponse(
+        request.url_for("enrollee_start"), status_code=status.HTTP_303_SEE_OTHER
+    )
 
 
 @router.delete("/")

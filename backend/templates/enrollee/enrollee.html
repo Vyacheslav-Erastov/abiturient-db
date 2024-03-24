@@ -49,8 +49,8 @@
             {% for application in enrollee.applications %}
             <tr>
                 <td>{{application.speciality.name}}</a></td>
-                <td>{{application.status}}</td>
-                <td>{{application.registartion_date}}</td>
+                <td>{{application.status.value}}</td>
+                <td>{{application.registration_date.strftime('%Y-%m-%d')}}</td>
                 <td>{{application.total_points}}</td>
             </tr>
             {% endfor %}

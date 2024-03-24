@@ -8,6 +8,7 @@
             <th scope="col">Дата регистрации</th>
             <th scope="col">Статус</th>
             <th scope="col">Количество баллов</th>
+            <th scope="col">Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -15,9 +16,26 @@
         <tr>
             <td>{{application.enrollee.first_name}} {{application.enrollee.second_name}}</td>
             <td>{{application.speciality.name}}</td>
-            <td>{{application.email}}</td>
-            <td>{{application.status}}</td>
+            <td>{{application.registration_date.strftime('%Y-%m-%d')}}</td>
+            <td>{{application.status.value}}</td>
             <td>{{application.total_points}}</td>
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Действия
+                    </a>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item"
+                                href="{{url_for('update_application').include_query_params(application_id=application.id, new_status='ACCEPTED')}}">Принять</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="{{url_for('update_application').include_query_params(application_id=application.id, new_status='REJECTED')}}">Отклонить</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

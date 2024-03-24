@@ -1,31 +1,27 @@
 {% extends "login_base.html" %}
 {% block content %}
 <form method="post" action="{{url_for('enrollee_register')}}">
-    <div class="modal-body">
-        <div class="mb-3">
-            <label for="first_name" class="form-label">Имя</label>
-            <input class="form-control" id="first_name" name="first_name">
-        </div>
-        <div class="mb-3">
-            <label for="second_name" class="form-label">Фамилия</label>
-            <input class="form-control" id="second_name" name="second_name">
-        </div>
-        <div class="mb-3">
-            <label for="phone_number" class="form-label">Телефон</label>
-            <input class="form-control" id="phone_number" name="phone_number">
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Почта</label>
-            <input class="form-control" id="email" name="email">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Пароль</label>
-            <input class="form-control" id="password" name="password">
-        </div>
+    <div class="mb-3">
+        <label for="first_name" class="form-label">Имя</label>
+        <input class="form-control" id="first_name" name="first_name">
     </div>
-    <div class="modal-footer">
-        <a href="{{url_for('enrollee_start')}}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</a>
-        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    <div class="mb-3">
+        <label for="second_name" class="form-label">Фамилия</label>
+        <input class="form-control" id="second_name" name="second_name">
     </div>
+    <div class="mb-3">
+        <label for="phone_number" class="form-label">Телефон</label>
+        <input class="form-control" id="phone_number" name="phone_number">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Почта</label>
+        <input class="form-control" id="email" name="email">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input class="form-control" id="password" name="password">
+    </div>
+    <a href="{{url_for('enrollee_start')}}" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</a>
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
 </form>
 {% endblock %}

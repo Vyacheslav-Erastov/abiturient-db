@@ -13,8 +13,8 @@ from app.models.speciality import Speciality
 
 class ApplicationStatus(str, Enum):
     CREATED = "CREATED"
-    UNDER_CONSIDARATION = "UNDER_CONSIDARATION"
-    CONFIRMED = "CONFIRMED"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
 
 
 class Application(Base):

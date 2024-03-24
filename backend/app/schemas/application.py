@@ -1,14 +1,14 @@
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional
 from uuid import UUID
 from fastapi import Form
 from pydantic import BaseModel
 from app.models.application import ApplicationStatus
 
-if TYPE_CHECKING:
-    from app.schemas.enrollee import Enrollee
-    from app.schemas.speciality import Speciality
-    from app.schemas.employee import Employee
+# if TYPE_CHECKING:
+#     from app.schemas.enrollee import Enrollee
+#     from app.schemas.speciality import Speciality
+#     from app.schemas.employee import Employee
 
 
 class ApplicationBase(BaseModel):
@@ -56,6 +56,9 @@ class ApplicationForm(BaseModel):
 
 
 class ApplicationDetailed(Application):
-    enrollee: "Enrollee"
-    employee: "Employee"
-    speciality: "Speciality"
+    enrollee: Any
+    employee: Any
+    speciality: Any
+
+
+ApplicationDetailed.model_rebuild()

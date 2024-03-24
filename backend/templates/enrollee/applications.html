@@ -15,8 +15,8 @@
         <tr>
             <td>{{application.enrollee.first_name}} {{application.enrollee.second_name}}</td>
             <td>{{application.speciality.name}}</td>
-            <td>{{application.email}}</td>
-            <td>{{application.status}}</td>
+            <td>{{application.registration_date.strftime('%Y-%m-%d')}}</td>
+            <td>{{application.status.value}}</td>
             <td>{{application.total_points}}</td>
         </tr>
         {% endfor %}

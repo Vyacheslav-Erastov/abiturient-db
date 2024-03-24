@@ -10,17 +10,12 @@ from app.core.security import get_current_employee
 
 router = APIRouter()
 
-# templates = Jinja2Templates(directory="templates")
 
-
-# @router.get("/")
-def read_specialities(
-    db: Session = Depends(deps.get_db),
-):
+def read_specialities(db):
     db_specialities = crud.speciality.get_multi(db=db)
     specialities = []
     for db_speciality in db_specialities:
-        speciality = schemas.SpecialityTemplate.from_orm(db_speciality).model_dump()
+        speciality = schemas.Speciality.from_orm(db_speciality).model_dump()
         specialities.append(speciality)
     return specialities
 

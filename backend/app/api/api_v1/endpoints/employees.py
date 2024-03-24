@@ -14,6 +14,7 @@ from app.core.security import (
     get_current_employee,
     get_password_hash,
 )
+from app.api.api_v1.endpoints.specialities import read_specialities
 
 router = APIRouter()
 
@@ -44,6 +45,20 @@ def employee_start(
         return templates.TemplateResponse(request=request, name="login.html")
     return templates.TemplateResponse(
         request=request, name="employee.html", context={"employee": employee}
+    )
+
+
+@router.get("/specialities")
+def employee_specialities_get(
+    request: Request,
+    employee=Depends(get_current_employee),
+    db: Session = Depends(deps.get_db),
+):
+    specialities = read_specialities(db=db)
+    return templates.TemplateResponse(
+        request=request,
+        name="specialities.html",
+        context={"employee": employee, "specialities": specialities},
     )
 
 

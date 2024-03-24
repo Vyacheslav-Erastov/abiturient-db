@@ -52,11 +52,17 @@ def read_enrollees(
 def enrollee_start(
     request: Request,
     enrollee=Depends(get_current_enrollee),
+    db: Session = Depends(deps.get_db),
 ):
     if enrollee is None:
         return templates.TemplateResponse(request=request, name="login.html")
+    specialities = []
+    for speciality in crud.speciality.get_multi(db=db):
+        specialities.append(schemas.Speciality.from_orm(speciality).model_dump())
     return templates.TemplateResponse(
-        request=request, name="enrollee.html", context={"enrollee": enrollee}
+        request=request,
+        name="enrollee.html",
+        context={"enrollee": enrollee, "specialities": specialities},
     )
 
 

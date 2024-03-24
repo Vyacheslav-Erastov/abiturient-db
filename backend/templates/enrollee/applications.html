@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Абитуриент</th>
+            <th scope="col">Специальность</th>
+            <th scope="col">Дата регистрации</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Количество баллов</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{application.enrollee.first_name}} {{application.enrollee.second_name}}</td>
+            <td>{{application.speciality.name}}</td>
+            <td>{{application.email}}</td>
+            <td>{{application.status}}</td>
+            <td>{{application.total_points}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

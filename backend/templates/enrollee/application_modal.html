@@ -9,18 +9,17 @@
             <form method="post" action="{{url_for('create_application')}}">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example">
+                        <select id="speciality_id" name="speciality_id" class="form-select"
+                            aria-label="Default select example">
                             <option selected>Выберите специальность</option>
                             {% for speciality in specialities %}
-                            <option value="{{speciality.id}}">speciality.name</option>
+                            <option value="{{speciality.id}}">{{speciality.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <input class="form-control" id="enrollee_id" name="enrollee_id" value="{{enrollee.id}}"
-                        hidden="true">
                     <div class="mb-3">
                         <label for="total_points" class="form-label">Количество баллов</label>
-                        <input class="form-control" id="total_points" name="total_points">
+                        <input type="number" class="form-control" id="total_points" name="total_points">
                     </div>
                 </div>
                 <div class="modal-footer">

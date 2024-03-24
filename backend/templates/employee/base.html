@@ -25,7 +25,9 @@
                             Посмотреть
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('read_applications') }}">Все заявки</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('read_applications') }}">Заявки</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('employee_specialities_get') }}">Специальности</a>
+                            </li>
                             <!-- <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -39,7 +41,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#createApplicationModal">Заявку</button></li>
+                                    data-bs-target="#createSpecialityModal">Специальность</button></li>
                         </ul>
                     </li>
                 </ul>
@@ -48,6 +50,7 @@
         </div>
     </nav>
     <div id="content">{% block content %}{% endblock %}</div>
+    {% include 'speciality_modal.html' %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

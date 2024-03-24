@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.responses import RedirectResponse
@@ -34,19 +35,23 @@ def read_applications(
 def create_application(
     request: Request,
     enrollee=Depends(get_current_enrollee),
-    application_in: schemas.ApplicationCreate = Depends(
-        schemas.ApplicationForm.as_form
-    ),
+    application_in: schemas.ApplicationForm = Depends(schemas.ApplicationForm.as_form),
     db: Session = Depends(deps.get_db),
 ):
     try:
-        application = crud.application.create(db=db, obj_in=application_in)
+        application_create = schemas.ApplicationCreate(
+            **application_in.model_dump(),
+            enrollee_id=enrollee.id,
+            registration_date=datetime.now(),
+            id=uuid4()
+        )
+        application = crud.application.create(db=db, obj_in=application_create)
         db.commit()
     except Exception as e:
         db.rollback()
         print(e)
     return RedirectResponse(
-        request.url_for("read_applications"), status_code=status.HTTP_303_SEE_OTHER
+        request.url_for("enrollee_start"), status_code=status.HTTP_303_SEE_OTHER
     )
 
 

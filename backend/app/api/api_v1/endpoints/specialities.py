@@ -6,15 +6,15 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app import crud
 from app.api import dependencies as deps
+from app.core.security import get_current_employee
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="templates")
+# templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/")
+# @router.get("/")
 def read_specialities(
-    request: Request,
     db: Session = Depends(deps.get_db),
 ):
     db_specialities = crud.speciality.get_multi(db=db)
@@ -22,27 +22,31 @@ def read_specialities(
     for db_speciality in db_specialities:
         speciality = schemas.SpecialityTemplate.from_orm(db_speciality).model_dump()
         specialities.append(speciality)
-    return templates.TemplateResponse(
-        request=request,
-        name="specialities.html",
-        context={"specialities": specialities},
-    )
+    return specialities
 
 
 @router.post("/")
 def create_speciality(
     request: Request,
-    speciality_in: schemas.SpecialityCreate = Depends(schemas.SpecialityForm.as_form),
+    speciality_in: schemas.SpecialityBase = Depends(schemas.SpecialityForm.as_form),
+    employee=Depends(get_current_employee),
     db: Session = Depends(deps.get_db),
 ):
     try:
-        speciality = crud.speciality.create(db=db, obj_in=speciality_in)
+        if employee is None:
+            return RedirectResponse(
+                request.url_for("employee_start"), status_code=status.HTTP_303_SEE_OTHER
+            )
+        speciality_create = schemas.SpecialityCreate(
+            **speciality_in.model_dump(), id=uuid4()
+        )
+        speciality = crud.speciality.create(db=db, obj_in=speciality_create)
         db.commit()
     except Exception as e:
         db.rollback()
         print(e)
     return RedirectResponse(
-        request.url_for("read_specialities"), status_code=status.HTTP_303_SEE_OTHER
+        request.url_for("employee_start"), status_code=status.HTTP_303_SEE_OTHER
     )
 
 

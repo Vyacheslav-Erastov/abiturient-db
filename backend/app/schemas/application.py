@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 class ApplicationBase(BaseModel):
     enrollee_id: UUID
-    employee_id: UUID
+    employee_id: UUID | None = None
     speciality_id: UUID
     registration_date: datetime | None
     status: ApplicationStatus | None = ApplicationStatus.CREATED
@@ -39,7 +39,7 @@ class ApplicationTemplate(Application):
     pass
 
 
-class ApplicationForm(ApplicationBase):
+class ApplicationForm(BaseModel):
     speciality_id: UUID
     total_points: int
 
